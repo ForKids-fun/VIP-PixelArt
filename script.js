@@ -21,28 +21,39 @@ let gridSize = 32;
 let isPainting = false;
 let erasing = false;
 
-// ===== FULL 100 THEMES =====
+// ===== FULL THEMES (NO CANDY, NO PASTEL & SOFT) =====
 const themes = [
-  "Cotton Candy","Strawberry Milk","Matcha Latte","Lavender Dream","Baby Blue Sky",
-  "Peach Blush","Vanilla Cream","Rose Quartz","Cloud Nine","Soft Lilac",
-  "Pastel Rainbow","Blush Pink","Mint Breeze","Powder Blue","Sakura Bloom",
-  "Cozy Beige","Warm Honey","Milk Tea","Soft Sunset","Morning Fog",
-  "Midnight Black","Obsidian","Carbon Fiber","Space Station","Dark Mode Plus",
-  "Hacker Green","Deep Navy","Luxury Charcoal","Eclipse","Black Gold",
-  "Neon Noir","Galaxy Void","Steel Gray","Dark Sapphire","Moon Shadow",
-  "Cyber Night","Phantom Blue","Cosmic Dust","After Hours","Executive Suite",
-  "Gummy Bears","Jellybean Party","Candy Shop","Rainbow Sprinkles","Bubblegum Pop",
-  "Donut Glaze","Ice Cream Truck","Cotton Candy Sky","Lollipop Lane","Unicorn Sparkle",
-  "Slime Time","Toy Box","Crayon Chaos","Sticker Pack","Playroom",
-  "Cartoon City","Happy Balloons","Confetti Blast","Pixel Playground","Birthday Cake",
-  "Forest Walk","Moss Green","Ocean Breeze","Deep Sea","Mountain Air",
-  "Rainy Day","Sunset Beach","Golden Hour","Desert Sand","Autumn Leaves",
-  "Spring Meadow","Morning Dew","Waterfall","Pine Woods","Driftwood",
-  "Neon City","Cyberpunk","Vaporwave","Synthwave","Laser Grid",
-  "Electric Blue","Plasma Pink","Digital Rain","Glitch Core","Pixel Matrix",
-  "AI Dream","Retro Arcade","Future Chrome","VR World","Tech Glow",
-  "Paint Splash","Marker Madness","Crayon Box","Sketchbook","Graffiti Wall",
-  "Watercolor Wash","Comic Panel","Pop Art","Minimal Zen","Mystery Mode"
+  // Dark & Moody
+  "Midnight Black", "Obsidian", "Carbon Fiber", "Space Station", "Dark Mode Plus",
+  "Hacker Green", "Deep Navy", "Luxury Charcoal", "Eclipse", "Black Gold",
+  "Neon Noir", "Galaxy Void", "Steel Gray", "Dark Sapphire", "Moon Shadow",
+  "Cyber Night", "Phantom Blue", "Cosmic Dust", "After Hours", "Executive Suite",
+
+  // Nature & Outdoors
+  "Forest Walk", "Moss Green", "Ocean Breeze", "Deep Sea", "Mountain Air",
+  "Rainy Day", "Sunset Beach", "Golden Hour", "Desert Sand", "Autumn Leaves",
+  "Spring Meadow", "Morning Dew", "Waterfall", "Pine Woods", "Driftwood",
+
+  // Futuristic & Tech
+  "Neon City", "Cyberpunk", "Vaporwave", "Synthwave", "Laser Grid",
+  "Electric Blue", "Plasma Pink", "Digital Rain", "Glitch Core", "Pixel Matrix",
+  "AI Dream", "Retro Arcade", "Future Chrome", "VR World", "Tech Glow",
+
+  // Art & Creativity
+  "Paint Splash", "Marker Madness", "Crayon Box", "Sketchbook", "Graffiti Wall",
+  "Watercolor Wash", "Comic Panel", "Pop Art", "Minimal Zen", "Mystery Mode",
+
+  // Fantasy & Magic
+  "Fairy Glade", "Unicorn Meadow", "Wizard Tower", "Magic Potion", "Crystal Cave",
+  "Floating Islands", "Mermaid Lagoon", "Enchanted Forest", "Friendly Dragons", "Moonlit Spell",
+  "Phoenix Fire", "Starry Portal", "Elf Village", "Gnome Homes", "Mystical Mask",
+  "Dream Castle", "Talking Animals", "Rainbow Bridge", "Magical Library", "Potion Shelf",
+
+  // Everyday & People
+  "Street Market", "Skateboard Park", "Kids Playing", "Cooking Time", "Reading Window",
+  "Rainy Umbrella", "Music Concert", "Dancing Crowd", "Picnic Day", "Cafe Scene",
+  "Bicycle Ride", "Library Corner", "Festival Fun", "Sunset Watch", "Old Town Street",
+  "Farmer Field", "Roller Skating", "Sandcastle Fun", "Board Games", "Friends Laughing"
 ];
 
 // ===== LOAD THEMES INTO SELECT =====
