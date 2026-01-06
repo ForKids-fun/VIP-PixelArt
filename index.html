@@ -60,6 +60,20 @@
   <source src="soft-background-music-409193.mp3" type="audio/mpeg">
 </audio>
 
+<script>
+const music = document.getElementById('bgMusic');
+
+// Wait for ANY user interaction
+function startMusic() {
+  music.play();
+  // Remove listener so it only triggers once
+  document.removeEventListener('click', startMusic);
+}
+
+document.addEventListener('click', startMusic);
+</script>
+
+
 <canvas id="exportCanvas" style="display:none;"></canvas>
 
 <script src="script.js"></script>
