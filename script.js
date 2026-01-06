@@ -131,6 +131,14 @@ randomThemeBtn.onclick = () => {
   applyTheme(t);
 };
 
+const music = document.getElementById("bgMusic");
+music.volume = 0.25; // calm, classy, billionaire vibes
+
+document.addEventListener("click", () => {
+  music.play().catch(() => {});
+}, { once: true });
+
+
 function applyTheme(name) {
   document.body.style.transition = "0.3s";
 
