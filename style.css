@@ -1,0 +1,51 @@
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: white;
+  text-align: center;
+}
+
+.top-bar {
+  padding: 16px;
+  font-size: 1.2rem;
+  background: rgba(0,0,0,0.4);
+}
+
+.top-bar span {
+  color: gold;
+}
+
+.tools, .save-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  padding: 12px;
+}
+
+button, select, input[type="color"] {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+}
+
+button {
+  cursor: pointer;
+  background: #ffd84d;
+}
+
+#grid {
+  display: grid;
+  justify-content: center;
+  margin: 20px auto;
+  background: #222;
+  padding: 6px;
+  width: fit-content;
+}
+
+.pixel {
+  background: white;
+  border: 1px solid #333;
+}
