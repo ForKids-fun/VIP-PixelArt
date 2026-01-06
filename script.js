@@ -1,22 +1,27 @@
+// ===== CORE ELEMENTS (REQUIRED) =====
 const grid = document.getElementById("grid");
 const colorPicker = document.getElementById("colorPicker");
+const exportCanvas = document.getElementById("exportCanvas");
+
+// ===== OPTIONAL ELEMENTS (SAFE) =====
 const brushType = document.getElementById("brushType");
-const brushSize = document.getElementById("brushSize");
 const eraserBtn = document.getElementById("eraser");
 const clearBtn = document.getElementById("clear");
 const saveBtn = document.getElementById("save");
 const gridSizeSelect = document.getElementById("gridSize");
 const resizeBtn = document.getElementById("resize");
-const exportCanvas = document.getElementById("exportCanvas");
 const themeSelect = document.getElementById("themeSelect");
 const applyThemeBtn = document.getElementById("applyTheme");
 const randomThemeBtn = document.getElementById("randomTheme");
+const exportSizeInput = document.getElementById("exportSize");
+const music = document.getElementById("bgMusic");
 
+// ===== STATE =====
 let gridSize = 32;
 let isPainting = false;
 let erasing = false;
 
-/* 🎨 100 THEMES */
+// ===== FULL 100 THEMES =====
 const themes = [
   "Cotton Candy","Strawberry Milk","Matcha Latte","Lavender Dream","Baby Blue Sky",
   "Peach Blush","Vanilla Cream","Rose Quartz","Cloud Nine","Soft Lilac",
@@ -40,121 +45,136 @@ const themes = [
   "Watercolor Wash","Comic Panel","Pop Art","Minimal Zen","Mystery Mode"
 ];
 
-/* LOAD THEMES */
-themes.forEach(t => {
-  const o = document.createElement("option");
-  o.value = t;
-  o.textContent = t;
-  themeSelect.appendChild(o);
-});
+// ===== LOAD THEMES INTO SELECT =====
+if (themeSelect) {
+  themes.forEach(t => {
+    const o = document.createElement("option");
+    o.value = t;
+    o.textContent = t;
+    themeSelect.appendChild(o);
+  });
+}
 
-/* GRID */
+// ===== CREATE GRID =====
 function createGrid(size) {
   grid.innerHTML = "";
+  grid.style.display = "grid";
   grid.style.gridTemplateColumns = `repeat(${size}, 16px)`;
-
+  grid.style.gridTemplateRows = `repeat(${size}, 16px)`;
   for (let i = 0; i < size * size; i++) {
-    const p = document.createElement("div");
-    p.className = "pixel";
-    p.style.width = "16px";
-    p.style.height = "16px";
-    p.style.background = "white";
+    const pixel = document.createElement("div");
+    pixel.className = "pixel";
+    pixel.style.width = "16px";
+    pixel.style.height = "16px";
+    pixel.style.background = "#ffffff";
 
-    p.addEventListener("mousedown", () => paint(p));
-    p.addEventListener("mouseover", () => {
-      if (isPainting) paint(p);
+    pixel.addEventListener("mousedown", () => paint(pixel));
+    pixel.addEventListener("mouseover", () => {
+      if (isPainting) paint(pixel);
     });
 
-    grid.appendChild(p);
+    grid.appendChild(pixel);
   }
 }
 
+// ===== PAINT FUNCTION =====
 function paint(pixel) {
-  const color = erasing ? "white" : colorPicker.value;
+  const color = erasing ? "#ffffff" : colorPicker.value;
   pixel.style.background = color;
+
+  if (!brushType) return;
 
   const index = [...grid.children].indexOf(pixel);
   const x = index % gridSize;
   const y = Math.floor(index / gridSize);
 
   if (brushType.value === "mirror-h") {
-    grid.children[y * gridSize + (gridSize - x - 1)].style.background = color;
+    const mirror = grid.children[y * gridSize + (gridSize - x - 1)];
+    if (mirror) mirror.style.background = color;
   }
   if (brushType.value === "mirror-v") {
-    grid.children[(gridSize - y - 1) * gridSize + x].style.background = color;
+    const mirror = grid.children[(gridSize - y - 1) * gridSize + x];
+    if (mirror) mirror.style.background = color;
   }
 }
 
-/* EVENTS */
-document.body.onmousedown = () => isPainting = true;
-document.body.onmouseup = () => isPainting = false;
+// ===== MOUSE EVENTS =====
+window.addEventListener("mousedown", () => isPainting = true);
+window.addEventListener("mouseup", () => isPainting = false);
 
-eraserBtn.onclick = () => erasing = !erasing;
+// ===== BUTTONS =====
+if (eraserBtn) eraserBtn.onclick = () => erasing = !erasing;
 
-clearBtn.onclick = () =>
-  document.querySelectorAll(".pixel").forEach(p => p.style.background = "white");
+if (clearBtn) clearBtn.onclick = () =>
+  document.querySelectorAll(".pixel").forEach(p => p.style.background = "#ffffff");
 
-resizeBtn.onclick = () => {
-  gridSize = Number(gridSizeSelect.value);
-  createGrid(gridSize);
-};
+if (resizeBtn && gridSizeSelect) {
+  resizeBtn.onclick = () => {
+    gridSize = Number(gridSizeSelect.value);
+    createGrid(gridSize);
+  };
+}
 
-/* SAVE HD */
-saveBtn.onclick = () => {
-  const size = Number(document.getElementById("exportSize").value);
-  exportCanvas.width = size;
-  exportCanvas.height = size;
-  const ctx = exportCanvas.getContext("2d");
-  const scale = size / gridSize;
+// ===== SAVE HD =====
+if (saveBtn && exportSizeInput) {
+  saveBtn.onclick = () => {
+    const size = Number(exportSizeInput.value);
+    exportCanvas.width = size;
+    exportCanvas.height = size;
+    const ctx = exportCanvas.getContext("2d");
+    const scale = size / gridSize;
 
-  document.querySelectorAll(".pixel").forEach((p, i) => {
-    ctx.fillStyle = p.style.background || "white";
-    ctx.fillRect(
-      (i % gridSize) * scale,
-      Math.floor(i / gridSize) * scale,
-      scale,
-      scale
-    );
-  });
+    document.querySelectorAll(".pixel").forEach((p, i) => {
+      ctx.fillStyle = p.style.background || "#ffffff";
+      ctx.fillRect(
+        (i % gridSize) * scale,
+        Math.floor(i / gridSize) * scale,
+        scale,
+        scale
+      );
+    });
 
-  const a = document.createElement("a");
-  a.download = "pixel-art-vip.png";
-  a.href = exportCanvas.toDataURL();
-  a.click();
-};
+    const a = document.createElement("a");
+    a.download = "pixel-art-vip.png";
+    a.href = exportCanvas.toDataURL("image/png");
+    a.click();
+  };
+}
 
-/* THEMES */
-applyThemeBtn.onclick = () => applyTheme(themeSelect.value);
-randomThemeBtn.onclick = () => {
-  const t = themes[Math.floor(Math.random() * themes.length)];
-  themeSelect.value = t;
-  applyTheme(t);
-};
-
-const music = document.getElementById("bgMusic");
-music.volume = 0.25; // calm, classy, billionaire vibes
-
-document.addEventListener("click", () => {
-  music.play().catch(() => {});
-}, { once: true });
-
-
+// ===== APPLY THEMES =====
 function applyTheme(name) {
-  document.body.style.transition = "0.3s";
+  if (!name) return;
 
   if (name.includes("Dark") || name.includes("Black") || name.includes("Night")) {
     document.body.style.background = "#111";
     grid.style.background = "#222";
   } else if (name.includes("Candy") || name.includes("Pink") || name.includes("Milk")) {
     document.body.style.background = "#ffd6e8";
-    grid.style.background = "#fff";
+    grid.style.background = "#ffffff";
   } else if (name.includes("Neon") || name.includes("Cyber")) {
     document.body.style.background = "#0f0c29";
     grid.style.background = "#302b63";
   } else {
     document.body.style.background = "#f2f2f2";
-    grid.style.background = "#ddd";
+    grid.style.background = "#dddddd";
   }
 }
 
+if (applyThemeBtn && themeSelect) applyThemeBtn.onclick = () => applyTheme(themeSelect.value);
+
+if (randomThemeBtn && themeSelect) randomThemeBtn.onclick = () => {
+  const t = themes[Math.floor(Math.random() * themes.length)];
+  themeSelect.value = t;
+  applyTheme(t);
+};
+
+// ===== MUSIC =====
+if (music) {
+  music.volume = 0.25;
+  document.addEventListener("click", () => {
+    music.play().catch(() => {});
+  }, { once: true });
+}
+
+// ===== INIT GRID =====
 createGrid(gridSize);
