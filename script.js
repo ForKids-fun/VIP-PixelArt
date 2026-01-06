@@ -4,6 +4,32 @@ const themeSelect = document.getElementById("themeSelect");
 const clearBtn = document.getElementById("clearBtn");
 const saveBtn = document.getElementById("saveBtn");
 
+/* 🎧 BACKGROUND MUSIC */
+const bgMusic = document.getElementById("bgMusic");
+const musicBtn = document.getElementById("musicBtn");
+
+if (bgMusic) {
+  bgMusic.volume = 0.25;
+}
+
+if (musicBtn && bgMusic) {
+  musicBtn.addEventListener("click", () => {
+    bgMusic.play().catch(() => {});
+    musicBtn.textContent = "Studio Music On 🎶";
+  });
+}
+
+/* Fallback: start music on first interaction */
+document.addEventListener(
+  "click",
+  () => {
+    if (bgMusic && bgMusic.paused) {
+      bgMusic.play().catch(() => {});
+    }
+  },
+  { once: true }
+);
+
 const GRID_SIZE = 24;
 let mouseDown = false;
 let currentColor = colorPicker.value;
@@ -57,8 +83,8 @@ for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
 }
 
 /* Drag drawing */
-document.body.addEventListener("mousedown", () => mouseDown = true);
-document.body.addEventListener("mouseup", () => mouseDown = false);
+document.body.addEventListener("mousedown", () => (mouseDown = true));
+document.body.addEventListener("mouseup", () => (mouseDown = false));
 
 /* Color picker */
 colorPicker.addEventListener("input", e => {
@@ -67,8 +93,6 @@ colorPicker.addEventListener("input", e => {
 
 /* Theme logic (NO background changes) */
 themeSelect.addEventListener("change", () => {
-  // themes are visual presets / inspiration only for now
-  // later: auto palettes, brush styles, mirror modes 👀🔥
   console.log("Theme selected:", themeSelect.value);
 });
 
@@ -79,7 +103,7 @@ clearBtn.addEventListener("click", () => {
   });
 });
 
-/* Save */
+/* Save PNG (VIP quality, no watermark) */
 saveBtn.addEventListener("click", () => {
   const canvas = document.getElementById("exportCanvas");
   canvas.width = GRID_SIZE;
