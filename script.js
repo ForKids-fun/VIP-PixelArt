@@ -17,31 +17,33 @@ function getCurrentUser() {
 const signInButton = document.getElementById("signInButton");
 const signUpButton = document.getElementById("signUpButton");
 const logOutButton = document.getElementById("logOutButton");
+
 const loginForm = document.getElementById("loginForm");
 const signUpForm = document.getElementById("signUpForm");
 const welcomeMessage = document.getElementById("welcomeMessage");
+
 const checkoutBtn = document.getElementById("checkoutBtn");
 
 // =======================
 // AUTH UI
 // =======================
 
-function toggleLoggedInState(isLoggedIn) {
-  signInButton?.classList.toggle("hidden", isLoggedIn);
-  signUpButton?.classList.toggle("hidden", isLoggedIn);
-  logOutButton?.classList.toggle("hidden", !isLoggedIn);
-  checkoutBtn?.classList.toggle("hidden", !isLoggedIn);
-  lockTools(!isLoggedIn);
+function toggleLoggedInState(loggedIn) {
+  signInButton?.classList.toggle("hidden", loggedIn);
+  signUpButton?.classList.toggle("hidden", loggedIn);
+  logOutButton?.classList.toggle("hidden", !loggedIn);
+  checkoutBtn?.classList.toggle("hidden", !loggedIn);
+  lockTools(!loggedIn);
 }
 
 function showSignIn() {
-  loginForm?.classList.remove("hidden");
-  signUpForm?.classList.add("hidden");
+  loginForm.classList.remove("hidden");
+  signUpForm.classList.add("hidden");
 }
 
 function showSignUp() {
-  signUpForm?.classList.remove("hidden");
-  loginForm?.classList.add("hidden");
+  signUpForm.classList.remove("hidden");
+  loginForm.classList.add("hidden");
 }
 
 // =======================
@@ -76,13 +78,10 @@ function logIn() {
 
   if (users[username] === password) {
     localStorage.setItem("currentUser", username);
-
     welcomeMessage.textContent = `Welcome, ${username} 👑`;
     welcomeMessage.classList.remove("hidden");
-
     loginForm.classList.add("hidden");
     signUpForm.classList.add("hidden");
-
     toggleLoggedInState(true);
     loadUserArt();
   } else {
@@ -126,9 +125,6 @@ const clearBtn = document.getElementById("clear");
 const saveBtn = document.getElementById("save");
 const gridSizeSelect = document.getElementById("gridSize");
 const resizeBtn = document.getElementById("resize");
-const themeSelect = document.getElementById("themeSelect");
-const applyThemeBtn = document.getElementById("applyTheme");
-const randomThemeBtn = document.getElementById("randomTheme");
 const exportSizeInput = document.getElementById("exportSize");
 const music = document.getElementById("bgMusic");
 
@@ -145,10 +141,8 @@ let erasing = false;
 // =======================
 
 function lockTools(lock) {
-  document.querySelectorAll(
-    "button, input, select"
-  ).forEach(el => {
-    if (!el.closest(".auth")) el.disabled = lock;
+  document.querySelectorAll("button, input, select").forEach(el => {
+    if (!el.closest(".auth-panel")) el.disabled = lock;
   });
 }
 
@@ -160,11 +154,12 @@ function createGrid(size) {
   grid.innerHTML = "";
   grid.style.display = "grid";
   grid.style.gridTemplateColumns = `repeat(${size}, 16px)`;
+  grid.style.gridTemplateRows = `repeat(${size}, 16px)`;
 
   for (let i = 0; i < size * size; i++) {
     const pixel = document.createElement("div");
     pixel.className = "pixel";
-    pixel.style.background = "#fff";
+    pixel.style.background = "#ffffff";
 
     pixel.addEventListener("mousedown", () => paint(pixel));
     pixel.addEventListener("mouseover", () => isPainting && paint(pixel));
@@ -175,7 +170,7 @@ function createGrid(size) {
 
 function paint(pixel) {
   if (!isLoggedIn()) return;
-  pixel.style.background = erasing ? "#fff" : colorPicker.value;
+  pixel.style.background = erasing ? "#ffffff" : colorPicker.value;
   autoSaveArt();
 }
 
@@ -183,7 +178,7 @@ window.addEventListener("mousedown", () => isPainting = true);
 window.addEventListener("mouseup", () => isPainting = false);
 
 function clearGrid() {
-  document.querySelectorAll(".pixel").forEach(p => p.style.background = "#fff");
+  document.querySelectorAll(".pixel").forEach(p => p.style.background = "#ffffff");
 }
 
 // =======================
@@ -200,24 +195,30 @@ function loadUserArt() {
   const data = JSON.parse(localStorage.getItem(`art_${getCurrentUser()}`));
   if (!data) return;
   document.querySelectorAll(".pixel").forEach((p, i) => {
-    p.style.background = data[i] || "#fff";
+    p.style.background = data[i] || "#ffffff";
   });
 }
 
 // =======================
-// SAVE HD
+// SAVE HD  ✅ THIS IS **YOUR CODE**
 // =======================
 
 saveBtn.onclick = () => {
   const size = Number(exportSizeInput.value);
   exportCanvas.width = size;
   exportCanvas.height = size;
+
   const ctx = exportCanvas.getContext("2d");
   const scale = size / gridSize;
 
   document.querySelectorAll(".pixel").forEach((p, i) => {
     ctx.fillStyle = p.style.background;
-    ctx.fillRect((i % gridSize) * scale, Math.floor(i / gridSize) * scale, scale, scale);
+    ctx.fillRect(
+      (i % gridSize) * scale,
+      Math.floor(i / gridSize) * scale,
+      scale,
+      scale
+    );
   });
 
   const a = document.createElement("a");
@@ -232,7 +233,7 @@ saveBtn.onclick = () => {
 
 if (music) {
   music.volume = 0.25;
-  document.addEventListener("click", () => music.play().catch(()=>{}), { once: true });
+  document.addEventListener("click", () => music.play().catch(() => {}), { once: true });
 }
 
 // =======================
