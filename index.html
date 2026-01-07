@@ -2,28 +2,62 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Pixel Art Studio VIP</title>
+  <title>Pixel Art Studio — VIP 👑</title>
   <link rel="stylesheet" href="style.css" />
-  
 </head>
 <body>
 
-  <h1>Pixel Art Studio <span style="font-weight:500;">VIP</span></h1>
-  
+<header class="top-bar">
+  <h1>🎨 Pixel Art Studio <span>VIP</span></h1>
+</header>
 
-  <div class="toolbar">
-    <input type="color" id="colorPicker" value="#222222" />
+<section class="tools">
+  <input type="color" id="colorPicker" value="#ff5fa2">
 
-    <select id="themeSelect"></select>
+  <select id="brushType">
+    <option value="pixel">Pixel</option>
+    <option value="mirror-h">Mirror Horizontal</option>
+    <option value="mirror-v">Mirror Vertical</option>
+  </select>
 
-    <button id="clearBtn">Clear</button>
-    <button id="saveBtn">Save PNG</button>
-  </div>
+  <label>
+    Size
+    <input type="range" id="brushSize" min="1" max="4" value="1">
+  </label>
 
-  <div id="grid"></div>
+  <button id="eraser">Eraser</button>
 
-  <canvas id="exportCanvas" style="display:none;"></canvas>
+  <select id="gridSize">
+    <option value="16">16×16</option>
+    <option value="32" selected>32×32</option>
+    <option value="64">64×64</option>
+  </select>
 
-  <script src="script.js"></script>
+  <button id="resize">Resize</button>
+  <button id="clear">Clear</button>
+</section>
+
+<section class="theme-panel">
+  <select id="themeSelect">
+    <option value="">🎨 Choose Theme</option>
+  </select>
+  <button id="applyTheme">Apply Theme</button>
+  <button id="randomTheme">🎲 Surprise Me</button>
+</section>
+
+<div id="grid"></div>
+
+<section class="save-panel">
+  <select id="exportSize">
+    <option value="512">512×512</option>
+    <option value="1024">1024×1024</option>
+    <option value="2048">2048×2048</option>
+  </select>
+  <button id="save">Save HD</button>
+</section>
+
+<canvas id="exportCanvas" style="display:none;"></canvas>
+
+<script src="script.js"></script>
 </body>
 </html>
