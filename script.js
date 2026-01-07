@@ -21,31 +21,14 @@ let gridSize = 32;
 let isPainting = false;
 let erasing = false;
 
-// ===== FULL 100 THEMES =====
+// ===== THEMES =====
 const themes = [
   "Cotton Candy","Strawberry Milk","Matcha Latte","Lavender Dream","Baby Blue Sky",
-  "Peach Blush","Vanilla Cream","Rose Quartz","Cloud Nine","Soft Lilac",
-  "Pastel Rainbow","Blush Pink","Mint Breeze","Powder Blue","Sakura Bloom",
-  "Cozy Beige","Warm Honey","Milk Tea","Soft Sunset","Morning Fog",
-  "Midnight Black","Obsidian","Carbon Fiber","Space Station","Dark Mode Plus",
-  "Hacker Green","Deep Navy","Luxury Charcoal","Eclipse","Black Gold",
-  "Neon Noir","Galaxy Void","Steel Gray","Dark Sapphire","Moon Shadow",
-  "Cyber Night","Phantom Blue","Cosmic Dust","After Hours","Executive Suite",
-  "Gummy Bears","Jellybean Party","Candy Shop","Rainbow Sprinkles","Bubblegum Pop",
-  "Donut Glaze","Ice Cream Truck","Cotton Candy Sky","Lollipop Lane","Unicorn Sparkle",
-  "Slime Time","Toy Box","Crayon Chaos","Sticker Pack","Playroom",
-  "Cartoon City","Happy Balloons","Confetti Blast","Pixel Playground","Birthday Cake",
-  "Forest Walk","Moss Green","Ocean Breeze","Deep Sea","Mountain Air",
-  "Rainy Day","Sunset Beach","Golden Hour","Desert Sand","Autumn Leaves",
-  "Spring Meadow","Morning Dew","Waterfall","Pine Woods","Driftwood",
-  "Neon City","Cyberpunk","Vaporwave","Synthwave","Laser Grid",
-  "Electric Blue","Plasma Pink","Digital Rain","Glitch Core","Pixel Matrix",
-  "AI Dream","Retro Arcade","Future Chrome","VR World","Tech Glow",
-  "Paint Splash","Marker Madness","Crayon Box","Sketchbook","Graffiti Wall",
-  "Watercolor Wash","Comic Panel","Pop Art","Minimal Zen","Mystery Mode"
+  "Midnight Black","Obsidian","Dark Mode Plus","Neon City","Cyberpunk",
+  "Forest Walk","Ocean Breeze","Golden Hour","Minimal Zen","Retro Arcade"
 ];
 
-// ===== LOAD THEMES INTO SELECT =====
+// ===== LOAD THEMES SAFELY =====
 if (themeSelect) {
   themes.forEach(t => {
     const o = document.createElement("option");
@@ -55,12 +38,12 @@ if (themeSelect) {
   });
 }
 
-// ===== CREATE GRID =====
+// ===== GRID CREATION =====
 function createGrid(size) {
   grid.innerHTML = "";
   grid.style.display = "grid";
   grid.style.gridTemplateColumns = `repeat(${size}, 16px)`;
-  grid.style.gridTemplateRows = `repeat(${size}, 16px)`;
+
   for (let i = 0; i < size * size; i++) {
     const pixel = document.createElement("div");
     pixel.className = "pixel";
@@ -92,21 +75,25 @@ function paint(pixel) {
     const mirror = grid.children[y * gridSize + (gridSize - x - 1)];
     if (mirror) mirror.style.background = color;
   }
+
   if (brushType.value === "mirror-v") {
     const mirror = grid.children[(gridSize - y - 1) * gridSize + x];
     if (mirror) mirror.style.background = color;
   }
 }
 
-// ===== MOUSE EVENTS =====
+// ===== MOUSE PAINTING =====
 window.addEventListener("mousedown", () => isPainting = true);
 window.addEventListener("mouseup", () => isPainting = false);
 
 // ===== BUTTONS =====
 if (eraserBtn) eraserBtn.onclick = () => erasing = !erasing;
 
-if (clearBtn) clearBtn.onclick = () =>
-  document.querySelectorAll(".pixel").forEach(p => p.style.background = "#ffffff");
+if (clearBtn) {
+  clearBtn.onclick = () =>
+    document.querySelectorAll(".pixel")
+      .forEach(p => p.style.background = "#ffffff");
+}
 
 if (resizeBtn && gridSizeSelect) {
   resizeBtn.onclick = () => {
@@ -141,14 +128,14 @@ if (saveBtn && exportSizeInput) {
   };
 }
 
-// ===== APPLY THEMES =====
+// ===== THEMES =====
 function applyTheme(name) {
   if (!name) return;
 
-  if (name.includes("Dark") || name.includes("Black") || name.includes("Night")) {
+  if (name.includes("Dark") || name.includes("Black")) {
     document.body.style.background = "#111";
     grid.style.background = "#222";
-  } else if (name.includes("Candy") || name.includes("Pink") || name.includes("Milk")) {
+  } else if (name.includes("Candy") || name.includes("Milk")) {
     document.body.style.background = "#ffd6e8";
     grid.style.background = "#ffffff";
   } else if (name.includes("Neon") || name.includes("Cyber")) {
@@ -160,13 +147,17 @@ function applyTheme(name) {
   }
 }
 
-if (applyThemeBtn && themeSelect) applyThemeBtn.onclick = () => applyTheme(themeSelect.value);
+if (applyThemeBtn && themeSelect) {
+  applyThemeBtn.onclick = () => applyTheme(themeSelect.value);
+}
 
-if (randomThemeBtn && themeSelect) randomThemeBtn.onclick = () => {
-  const t = themes[Math.floor(Math.random() * themes.length)];
-  themeSelect.value = t;
-  applyTheme(t);
-};
+if (randomThemeBtn && themeSelect) {
+  randomThemeBtn.onclick = () => {
+    const t = themes[Math.floor(Math.random() * themes.length)];
+    themeSelect.value = t;
+    applyTheme(t);
+  };
+}
 
 // ===== MUSIC =====
 if (music) {
@@ -176,5 +167,5 @@ if (music) {
   }, { once: true });
 }
 
-// ===== INIT GRID =====
+// ===== INIT =====
 createGrid(gridSize);
