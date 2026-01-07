@@ -9,7 +9,33 @@
 
 <header class="top-bar">
   <h1>🎨 Pixel Art Studio <span>VIP</span></h1>
+
+  <!-- AUTH BUTTONS -->
+  <div class="auth-buttons">
+    <button id="signInButton" onclick="showSignIn()">Sign In</button>
+    <button id="signUpButton" onclick="showSignUp()">Sign Up</button>
+    <button id="logOutButton" class="hidden" onclick="logOut()">Log Out</button>
+  </div>
 </header>
+
+<!-- AUTH FORMS -->
+<section class="auth-panel">
+  <div id="welcomeMessage" class="welcome-message hidden"></div>
+
+  <div id="loginForm" class="form-box hidden">
+    <h2>Log In</h2>
+    <input type="text" id="usernameInput" placeholder="Username">
+    <input type="password" id="passwordInput" placeholder="Password">
+    <button onclick="logIn()">Log In</button>
+  </div>
+
+  <div id="signUpForm" class="form-box hidden">
+    <h2>Sign Up</h2>
+    <input type="text" id="newUsernameInput" placeholder="Username">
+    <input type="password" id="newPasswordInput" placeholder="Password">
+    <button onclick="signUp()">Sign Up</button>
+  </div>
+</section>
 
 <section class="tools">
   <input type="color" id="colorPicker" value="#ff5fa2">
@@ -55,32 +81,22 @@
   </select>
   <button id="save">Save HD</button>
 </section>
-  
-
-
 
 <canvas id="exportCanvas" style="display:none;"></canvas>
 
 <script src="script.js"></script>
-  <audio id="bgMusic" loop>
+
+<audio id="bgMusic" loop>
   <source src="soft-background-music-409193.mp3" type="audio/mpeg">
-  Your browser does not support the audio element.
 </audio>
 
 <script>
 const music = document.getElementById('bgMusic');
 
-// Wait for first interaction anywhere
 function startMusic() {
-  music.play()
-    .then(() => console.log("Music playing"))
-    .catch(err => console.log("Music error:", err));
-
-  // Remove listener so it only triggers once
+  music.play().catch(() => {});
   document.removeEventListener('click', startMusic);
 }
-
-// Trigger on first click anywhere on the page
 document.addEventListener('click', startMusic);
 </script>
 
