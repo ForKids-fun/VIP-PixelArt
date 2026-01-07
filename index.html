@@ -27,6 +27,9 @@
     <input type="text" id="usernameInput" placeholder="Username">
     <input type="password" id="passwordInput" placeholder="Password">
     <button onclick="logIn()">Log In</button>
+
+    <!-- OPTIONAL -->
+    <button onclick="goCreateAccount()">Create New Account</button>
   </div>
 
   <div id="signUpForm" class="form-box hidden">
@@ -37,7 +40,8 @@
   </div>
 </section>
 
-<section class="tools">
+<!-- 🔒 TOOLS (LOCKED BY JS) -->
+<section class="tools" id="tools">
   <input type="color" id="colorPicker" value="#ff5fa2">
 
   <select id="brushType">
@@ -63,7 +67,7 @@
   <button id="clear">Clear</button>
 </section>
 
-<section class="theme-panel">
+<section class="theme-panel" id="themePanel">
   <select id="themeSelect">
     <option value="">🎨 Choose Theme</option>
   </select>
@@ -71,15 +75,18 @@
   <button id="randomTheme">🎲 Surprise Me</button>
 </section>
 
+<!-- 🔒 GRID -->
 <div id="grid"></div>
 
-<section class="save-panel">
+<!-- 💾 SAVE + 💳 TRANSACTION -->
+<section class="save-panel" id="savePanel">
   <select id="exportSize">
     <option value="512">512×512</option>
     <option value="1024">1024×1024</option>
     <option value="2048">2048×2048</option>
   </select>
   <button id="save">Save HD</button>
+  <button id="payButton" onclick="goToPayment()">Complete Transaction</button>
 </section>
 
 <canvas id="exportCanvas" style="display:none;"></canvas>
@@ -92,7 +99,6 @@
 
 <script>
 const music = document.getElementById('bgMusic');
-
 function startMusic() {
   music.play().catch(() => {});
   document.removeEventListener('click', startMusic);
