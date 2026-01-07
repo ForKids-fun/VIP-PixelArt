@@ -2,109 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Pixel Art Studio — VIP 👑</title>
+  <title>Pixel Art Studio VIP</title>
   <link rel="stylesheet" href="style.css" />
+  
 </head>
 <body>
 
-<header class="top-bar">
-  <h1>🎨 Pixel Art Studio <span>VIP</span></h1>
+  <h1>Pixel Art Studio <span style="font-weight:500;">VIP</span></h1>
+  <div class="vip-tag">Premium tools · No watermark · Pro quality</div>
 
-  <!-- AUTH BUTTONS -->
-  <div class="auth-buttons">
-    <button id="signInButton" onclick="showSignIn()">Sign In</button>
-    <button id="signUpButton" onclick="showSignUp()">Sign Up</button>
-    <button id="logOutButton" class="hidden" onclick="logOut()">Log Out</button>
-  </div>
-</header>
+  <div class="toolbar">
+    <input type="color" id="colorPicker" value="#222222" />
 
-<!-- AUTH FORMS -->
-<section class="auth-panel">
-  <div id="welcomeMessage" class="welcome-message hidden"></div>
+    <select id="themeSelect"></select>
 
-  <div id="loginForm" class="form-box hidden">
-    <h2>Log In</h2>
-    <input type="text" id="usernameInput" placeholder="Username">
-    <input type="password" id="passwordInput" placeholder="Password">
-    <button onclick="logIn()">Log In</button>
-
-    <!-- OPTIONAL -->
-    <button onclick="goCreateAccount()">Create New Account</button>
+    <button id="clearBtn">Clear</button>
+    <button id="saveBtn">Save PNG</button>
   </div>
 
-  <div id="signUpForm" class="form-box hidden">
-    <h2>Sign Up</h2>
-    <input type="text" id="newUsernameInput" placeholder="Username">
-    <input type="password" id="newPasswordInput" placeholder="Password">
-    <button onclick="signUp()">Sign Up</button>
-  </div>
-</section>
+  <div id="grid"></div>
 
-<!-- 🔒 TOOLS (LOCKED BY JS) -->
-<section class="tools" id="tools">
-  <input type="color" id="colorPicker" value="#ff5fa2">
+  <canvas id="exportCanvas" style="display:none;"></canvas>
 
-  <select id="brushType">
-    <option value="pixel">Pixel</option>
-    <option value="mirror-h">Mirror Horizontal</option>
-    <option value="mirror-v">Mirror Vertical</option>
-  </select>
-
-  <label>
-    Size
-    <input type="range" id="brushSize" min="1" max="4" value="1">
-  </label>
-
-  <button id="eraser">Eraser</button>
-
-  <select id="gridSize">
-    <option value="16">16×16</option>
-    <option value="32" selected>32×32</option>
-    <option value="64">64×64</option>
-  </select>
-
-  <button id="resize">Resize</button>
-  <button id="clear">Clear</button>
-</section>
-
-<section class="theme-panel" id="themePanel">
-  <select id="themeSelect">
-    <option value="">🎨 Choose Theme</option>
-  </select>
-  <button id="applyTheme">Apply Theme</button>
-  <button id="randomTheme">🎲 Surprise Me</button>
-</section>
-
-<!-- 🔒 GRID -->
-<div id="grid"></div>
-
-<!-- 💾 SAVE + 💳 TRANSACTION -->
-<section class="save-panel" id="savePanel">
-  <select id="exportSize">
-    <option value="512">512×512</option>
-    <option value="1024">1024×1024</option>
-    <option value="2048">2048×2048</option>
-  </select>
-  <button id="save">Save HD</button>
-  <button id="payButton" onclick="goToPayment()">Complete Transaction</button>
-</section>
-
-<canvas id="exportCanvas" style="display:none;"></canvas>
-
-<script src="script.js"></script>
-
-<audio id="bgMusic" loop>
-  <source src="soft-background-music-409193.mp3" type="audio/mpeg">
-</audio>
-
-<script>
-const music = document.getElementById('bgMusic');
-function startMusic() {
-  music.play().catch(() => {});
-  document.removeEventListener('click', startMusic);
-}
-document.addEventListener('click', startMusic);
-</script>
-
+  <script src="script.js"></script>
 </body>
 </html>
