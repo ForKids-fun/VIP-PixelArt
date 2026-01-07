@@ -1,101 +1,180 @@
+// ===== CORE ELEMENTS (REQUIRED) =====
 const grid = document.getElementById("grid");
 const colorPicker = document.getElementById("colorPicker");
+const exportCanvas = document.getElementById("exportCanvas");
+
+// ===== OPTIONAL ELEMENTS (SAFE) =====
+const brushType = document.getElementById("brushType");
+const eraserBtn = document.getElementById("eraser");
+const clearBtn = document.getElementById("clear");
+const saveBtn = document.getElementById("save");
+const gridSizeSelect = document.getElementById("gridSize");
+const resizeBtn = document.getElementById("resize");
 const themeSelect = document.getElementById("themeSelect");
-const clearBtn = document.getElementById("clearBtn");
-const saveBtn = document.getElementById("saveBtn");
+const applyThemeBtn = document.getElementById("applyTheme");
+const randomThemeBtn = document.getElementById("randomTheme");
+const exportSizeInput = document.getElementById("exportSize");
+const music = document.getElementById("bgMusic");
 
-const GRID_SIZE = 24;
-let mouseDown = false;
-let currentColor = colorPicker.value;
+// ===== STATE =====
+let gridSize = 32;
+let isPainting = false;
+let erasing = false;
 
-/* 🔥 100 CLEAN, NOT-CHILDISH THEMES */
+// ===== FULL 100 THEMES =====
 const themes = [
-  "Monochrome Ink","Soft Charcoal","Muted Pastel","Midnight Studio","Warm Paper",
-  "Cool Slate","Minimal Beige","Modern Clay","Foggy Blue","Desert Sand",
-  "Rose Dust","Cement Grey","Studio Olive","Muted Teal","Vintage Print",
-  "Coffee Stain","Soft Lavender","Misty Green","Classic Noir","Editorial Cream",
-  "Gallery White","Urban Steel","Autumn Ash","Cold Marble","Warm Linen",
-  "Ink Wash","Soft Blush","Pine Shadow","Calm Sky","Neutral Taupe",
-  "Sunlit Stone","Dusty Rose","Graphite","Muted Coral","Nordic Ice",
-  "Museum Grey","Dry Ink","Old Paper","Soft Moss","Warm Shadow",
-  "Chalkboard","Muted Indigo","Cool Concrete","Fog","Wheat Paper",
-  "Soft Peach","Storm Cloud","Calm Clay","Olive Paper","Cool Sand",
-  "Charcoal Wash","Muted Mint","Evening Blue","Natural Fiber","Warm Grey",
-  "Soft Cocoa","Stone White","Inkwell","Light Ash","Parchment",
-  "Soft Smoke","Neutral Sky","Warm Stone","Studio Cream","Cool Linen",
-  "Quiet Blue","Dry Clay","Soft Olive","Muted Plum","Calm Shadow",
-  "Winter Fog","Natural Cotton","Warm Chalk","Ink Grey","Soft Slate",
-  "Paper White","Muted Bronze","Cool Fog","Studio Neutral","Balanced Grey"
+  "Cotton Candy","Strawberry Milk","Matcha Latte","Lavender Dream","Baby Blue Sky",
+  "Peach Blush","Vanilla Cream","Rose Quartz","Cloud Nine","Soft Lilac",
+  "Pastel Rainbow","Blush Pink","Mint Breeze","Powder Blue","Sakura Bloom",
+  "Cozy Beige","Warm Honey","Milk Tea","Soft Sunset","Morning Fog",
+  "Midnight Black","Obsidian","Carbon Fiber","Space Station","Dark Mode Plus",
+  "Hacker Green","Deep Navy","Luxury Charcoal","Eclipse","Black Gold",
+  "Neon Noir","Galaxy Void","Steel Gray","Dark Sapphire","Moon Shadow",
+  "Cyber Night","Phantom Blue","Cosmic Dust","After Hours","Executive Suite",
+  "Gummy Bears","Jellybean Party","Candy Shop","Rainbow Sprinkles","Bubblegum Pop",
+  "Donut Glaze","Ice Cream Truck","Cotton Candy Sky","Lollipop Lane","Unicorn Sparkle",
+  "Slime Time","Toy Box","Crayon Chaos","Sticker Pack","Playroom",
+  "Cartoon City","Happy Balloons","Confetti Blast","Pixel Playground","Birthday Cake",
+  "Forest Walk","Moss Green","Ocean Breeze","Deep Sea","Mountain Air",
+  "Rainy Day","Sunset Beach","Golden Hour","Desert Sand","Autumn Leaves",
+  "Spring Meadow","Morning Dew","Waterfall","Pine Woods","Driftwood",
+  "Neon City","Cyberpunk","Vaporwave","Synthwave","Laser Grid",
+  "Electric Blue","Plasma Pink","Digital Rain","Glitch Core","Pixel Matrix",
+  "AI Dream","Retro Arcade","Future Chrome","VR World","Tech Glow",
+  "Paint Splash","Marker Madness","Crayon Box","Sketchbook","Graffiti Wall",
+  "Watercolor Wash","Comic Panel","Pop Art","Minimal Zen","Mystery Mode"
 ];
 
-/* Populate theme dropdown */
-themes.forEach(theme => {
-  const option = document.createElement("option");
-  option.value = theme;
-  option.textContent = theme;
-  themeSelect.appendChild(option);
-});
-
-/* Build grid */
-grid.style.gridTemplateColumns = `repeat(${GRID_SIZE}, 20px)`;
-
-for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
-  const pixel = document.createElement("div");
-  pixel.className = "pixel";
-
-  pixel.addEventListener("mousedown", () => {
-    pixel.style.backgroundColor = currentColor;
+// ===== LOAD THEMES INTO SELECT =====
+if (themeSelect) {
+  themes.forEach(t => {
+    const o = document.createElement("option");
+    o.value = t;
+    o.textContent = t;
+    themeSelect.appendChild(o);
   });
-
-  pixel.addEventListener("mouseover", () => {
-    if (mouseDown) {
-      pixel.style.backgroundColor = currentColor;
-    }
-  });
-
-  grid.appendChild(pixel);
 }
 
-/* Drag drawing */
-document.body.addEventListener("mousedown", () => mouseDown = true);
-document.body.addEventListener("mouseup", () => mouseDown = false);
+// ===== CREATE GRID =====
+function createGrid(size) {
+  grid.innerHTML = "";
+  grid.style.display = "grid";
+  grid.style.gridTemplateColumns = `repeat(${size}, 16px)`;
+  grid.style.gridTemplateRows = `repeat(${size}, 16px)`;
+  for (let i = 0; i < size * size; i++) {
+    const pixel = document.createElement("div");
+    pixel.className = "pixel";
+    pixel.style.width = "16px";
+    pixel.style.height = "16px";
+    pixel.style.background = "#ffffff";
 
-/* Color picker */
-colorPicker.addEventListener("input", e => {
-  currentColor = e.target.value;
-});
+    pixel.addEventListener("mousedown", () => paint(pixel));
+    pixel.addEventListener("mouseover", () => {
+      if (isPainting) paint(pixel);
+    });
 
-/* Theme logic (NO background changes) */
-themeSelect.addEventListener("change", () => {
-  // themes are visual presets / inspiration only for now
-  // later: auto palettes, brush styles, mirror modes 👀🔥
-  console.log("Theme selected:", themeSelect.value);
-});
+    grid.appendChild(pixel);
+  }
+}
 
-/* Clear */
-clearBtn.addEventListener("click", () => {
-  document.querySelectorAll(".pixel").forEach(p => {
-    p.style.backgroundColor = "white";
-  });
-});
+// ===== PAINT FUNCTION =====
+function paint(pixel) {
+  const color = erasing ? "#ffffff" : colorPicker.value;
+  pixel.style.background = color;
 
-/* Save */
-saveBtn.addEventListener("click", () => {
-  const canvas = document.getElementById("exportCanvas");
-  canvas.width = GRID_SIZE;
-  canvas.height = GRID_SIZE;
-  const ctx = canvas.getContext("2d");
+  if (!brushType) return;
 
-  const pixels = document.querySelectorAll(".pixel");
-  pixels.forEach((pixel, i) => {
-    const x = i % GRID_SIZE;
-    const y = Math.floor(i / GRID_SIZE);
-    ctx.fillStyle = pixel.style.backgroundColor || "white";
-    ctx.fillRect(x, y, 1, 1);
-  });
+  const index = [...grid.children].indexOf(pixel);
+  const x = index % gridSize;
+  const y = Math.floor(index / gridSize);
 
-  const link = document.createElement("a");
-  link.download = "pixel-art-vip.png";
-  link.href = canvas.toDataURL("image/png");
-  link.click();
-});
+  if (brushType.value === "mirror-h") {
+    const mirror = grid.children[y * gridSize + (gridSize - x - 1)];
+    if (mirror) mirror.style.background = color;
+  }
+  if (brushType.value === "mirror-v") {
+    const mirror = grid.children[(gridSize - y - 1) * gridSize + x];
+    if (mirror) mirror.style.background = color;
+  }
+}
+
+// ===== MOUSE EVENTS =====
+window.addEventListener("mousedown", () => isPainting = true);
+window.addEventListener("mouseup", () => isPainting = false);
+
+// ===== BUTTONS =====
+if (eraserBtn) eraserBtn.onclick = () => erasing = !erasing;
+
+if (clearBtn) clearBtn.onclick = () =>
+  document.querySelectorAll(".pixel").forEach(p => p.style.background = "#ffffff");
+
+if (resizeBtn && gridSizeSelect) {
+  resizeBtn.onclick = () => {
+    gridSize = Number(gridSizeSelect.value);
+    createGrid(gridSize);
+  };
+}
+
+// ===== SAVE HD =====
+if (saveBtn && exportSizeInput) {
+  saveBtn.onclick = () => {
+    const size = Number(exportSizeInput.value);
+    exportCanvas.width = size;
+    exportCanvas.height = size;
+    const ctx = exportCanvas.getContext("2d");
+    const scale = size / gridSize;
+
+    document.querySelectorAll(".pixel").forEach((p, i) => {
+      ctx.fillStyle = p.style.background || "#ffffff";
+      ctx.fillRect(
+        (i % gridSize) * scale,
+        Math.floor(i / gridSize) * scale,
+        scale,
+        scale
+      );
+    });
+
+    const a = document.createElement("a");
+    a.download = "pixel-art-vip.png";
+    a.href = exportCanvas.toDataURL("image/png");
+    a.click();
+  };
+}
+
+// ===== APPLY THEMES =====
+function applyTheme(name) {
+  if (!name) return;
+
+  if (name.includes("Dark") || name.includes("Black") || name.includes("Night")) {
+    document.body.style.background = "#111";
+    grid.style.background = "#222";
+  } else if (name.includes("Candy") || name.includes("Pink") || name.includes("Milk")) {
+    document.body.style.background = "#ffd6e8";
+    grid.style.background = "#ffffff";
+  } else if (name.includes("Neon") || name.includes("Cyber")) {
+    document.body.style.background = "#0f0c29";
+    grid.style.background = "#302b63";
+  } else {
+    document.body.style.background = "#f2f2f2";
+    grid.style.background = "#dddddd";
+  }
+}
+
+if (applyThemeBtn && themeSelect) applyThemeBtn.onclick = () => applyTheme(themeSelect.value);
+
+if (randomThemeBtn && themeSelect) randomThemeBtn.onclick = () => {
+  const t = themes[Math.floor(Math.random() * themes.length)];
+  themeSelect.value = t;
+  applyTheme(t);
+};
+
+// ===== MUSIC =====
+if (music) {
+  music.volume = 0.25;
+  document.addEventListener("click", () => {
+    music.play().catch(() => {});
+  }, { once: true });
+}
+
+// ===== INIT GRID =====
+createGrid(gridSize);
