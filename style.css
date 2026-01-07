@@ -1,32 +1,151 @@
-body {
-  margin: 0;
-  font-family: system-ui, sans-serif;
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-  color: white;
-  text-align: center;
+/* ===== RESET & BASE ===== */
+* {
+  box-sizing: border-box;
 }
 
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  color: white;
+  text-align: center;
+
+  /* GLAM VIP BACKGROUND */
+  background-image:
+    linear-gradient(rgba(10,10,20,0.75), rgba(10,10,20,0.85)),
+    url("https://images.unsplash.com/photo-1513105857239-405e5224e7ca?w=900&auto=format&fit=crop&q=60");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+/* ===== TOP BAR ===== */
 .top-bar {
-  padding: 16px;
-  font-size: 1.2rem;
-  background: rgba(0,0,0,0.4);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  padding: 16px 20px;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.top-bar h1 {
+  margin: 0;
+  font-size: 1.4rem;
+  letter-spacing: 0.5px;
 }
 
 .top-bar span {
   color: gold;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
 }
 
-.tools, .save-panel {
+/* ===== AUTH BUTTONS (TOP RIGHT) ===== */
+.auth-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.auth-buttons button {
+  background: linear-gradient(135deg, #00ff88, #00cc6a);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 255, 136, 0.4);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.auth-buttons button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 255, 136, 0.6);
+}
+
+.auth-buttons button.hidden {
+  display: none;
+}
+
+/* ===== AUTH PANELS ===== */
+.auth-panel {
+  margin-top: 20px;
+}
+
+.form-box {
+  max-width: 320px;
+  margin: 16px auto;
+  padding: 20px;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  box-shadow: 0 0 25px rgba(255,255,255,0.08);
+}
+
+.form-box h2 {
+  margin-top: 0;
+}
+
+.form-box input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  font-weight: 600;
+}
+
+.form-box button {
+  width: 100%;
+  margin-top: 10px;
+  background: linear-gradient(135deg, gold, #ffb700);
+  color: #222;
+  font-weight: 800;
+  border-radius: 999px;
+}
+
+/* ===== WELCOME MESSAGE ===== */
+.welcome-message {
+  margin: 16px;
+  font-size: 1.2rem;
+  color: #aaffcc;
+}
+
+.hidden {
+  display: none;
+}
+
+/* ===== TOOL PANELS ===== */
+.tools,
+.save-panel,
+.theme-panel {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   justify-content: center;
-  padding: 12px;
+  padding: 14px;
+  margin: 10px auto;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  width: fit-content;
+  max-width: 95%;
 }
 
-button, select, input[type="color"] {
+label {
+  font-weight: 600;
+}
+
+/* ===== BUTTONS & INPUTS ===== */
+button,
+select,
+input[type="color"],
+input[type="range"] {
   padding: 8px 12px;
-  border-radius: 8px;
+  border-radius: 10px;
   border: none;
   font-weight: bold;
 }
@@ -34,18 +153,48 @@ button, select, input[type="color"] {
 button {
   cursor: pointer;
   background: #ffd84d;
+  color: #222;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: transform 0.1s ease;
 }
 
+button:hover {
+  transform: translateY(-1px);
+}
+
+/* ===== GRID ===== */
 #grid {
   display: grid;
   justify-content: center;
-  margin: 20px auto;
-  background: #222;
-  padding: 6px;
+  margin: 25px auto;
+  background: rgba(0,0,0,0.6);
+  padding: 8px;
+  border-radius: 14px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.6);
   width: fit-content;
 }
 
 .pixel {
   background: white;
   border: 1px solid #333;
+  transition: background 0.05s linear;
+}
+
+/* ===== VIP GLOW EFFECT ===== */
+#grid:hover {
+  box-shadow: 0 0 40px rgba(0, 255, 200, 0.25);
+}
+
+/* ===== SCROLLBAR (EXTRA GLAM) ===== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(gold, #00ff88);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.4);
 }
